@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    checkforupdate.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    checkforupdate.h
 
 FORMS    += mainwindow.ui
 

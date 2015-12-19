@@ -39,6 +39,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionCheck_for_Update"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -63,6 +64,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Update">
+   <property name="text">
+    <string>Check for Update...</string>
    </property>
   </action>
  </widget>
