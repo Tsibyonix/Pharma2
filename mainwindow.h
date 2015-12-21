@@ -2,12 +2,18 @@
 #define MAINWINDOW_H
 
 #include "checkforupdate.h"
+#include "loaddatabase.h"
 
 #include <QCoreApplication>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QStandardPaths>
+#include <QDebug>
+#include <QSettings>
+#include <QThread>
 
 //class CheckForUpdate;
+class LoadDatabase;
 
 namespace Ui {
 class MainWindow;
@@ -27,10 +33,22 @@ private:
     QString OrganizationName;
     QString SubVersion;
 
+    QStringList dbPathList;
+
+    QThread *LoadDatabaseThread;
+
     //update
     CheckForUpdate update;
 
-    void initSignalSlots();
+    //database
+    LoadDatabase *database;
+
+    //settings
+    void saveSettings();
+    void loadSettings();
+
+    void init_SignalSlots();
+    void init_LoadDatabase();
     Ui::MainWindow *ui;
 
 signals:
