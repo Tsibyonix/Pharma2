@@ -51,8 +51,8 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>pushButton_2</tabstop>
   <tabstop>queryLineEdit</tabstop>
+  <tabstop>pushButton_2</tabstop>
   <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>

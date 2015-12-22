@@ -60,7 +60,8 @@ private:
     void init_SignalSlots();
     void init_LoadDatabase();
 
-    void processQuery(QString Query);
+
+    void processQuery(QString Query, QString Title);
     Ui::MainWindow *ui;
 
 signals:
@@ -68,11 +69,16 @@ signals:
 private slots:
     void showMessage(QString message);
     void aboutWindow(bool);
+    void closeTab(int index);
+
+    void tableListSelectionChanged(QModelIndex index);
 
     //action
     void action_CheckForUpdate();
     void action_RunQuery();
     void action_Exit();
+
+    void init_TableList();
 };
 
 #endif // MAINWINDOW_H
