@@ -3,6 +3,7 @@
 
 #include "checkforupdate.h"
 #include "loaddatabase.h"
+#include "runquerydialog.h"
 
 #include <QCoreApplication>
 #include <QMainWindow>
@@ -11,6 +12,13 @@
 #include <QDebug>
 #include <QSettings>
 #include <QThread>
+#include <QSqlQuery>
+#include <QSqlQueryModel>
+#include <QSqlError>
+
+//ui
+
+#include <QTableView>
 
 //class CheckForUpdate;
 class LoadDatabase;
@@ -37,6 +45,8 @@ private:
 
     QThread *LoadDatabaseThread;
 
+    QSqlQueryModel *model;
+
     //update
     CheckForUpdate update;
 
@@ -49,6 +59,8 @@ private:
 
     void init_SignalSlots();
     void init_LoadDatabase();
+
+    void processQuery(QString Query);
     Ui::MainWindow *ui;
 
 signals:
@@ -59,6 +71,8 @@ private slots:
 
     //action
     void action_CheckForUpdate();
+    void action_RunQuery();
+    void action_Exit();
 };
 
 #endif // MAINWINDOW_H

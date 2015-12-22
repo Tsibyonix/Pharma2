@@ -8,6 +8,11 @@ RunQueryDialog::RunQueryDialog(QWidget *parent) :
     ui->setupUi(this);
 }
 
+QString RunQueryDialog::returnQuery()
+{
+    return ui->queryLineEdit->text();
+}
+
 RunQueryDialog::~RunQueryDialog()
 {
     delete ui;

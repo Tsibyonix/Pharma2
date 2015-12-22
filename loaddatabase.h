@@ -10,7 +10,6 @@ class LoadDatabase : public QObject
     Q_OBJECT
 public:
     explicit LoadDatabase(QStringList databaseLocation, QObject *parent = 0);
-    void closeDatabase();
     bool returnDatabaseState();
 
 private:
@@ -24,6 +23,7 @@ signals:
 
 public slots:
     void loadDatabase();
+    void closeDatabase();
 };
 
 #endif // LOADDATABASE_H

@@ -12,6 +12,7 @@ class RunQueryDialog : public QDialog
     Q_OBJECT
 
 public:
+    QString returnQuery();
     explicit RunQueryDialog(QWidget *parent = 0);
     ~RunQueryDialog();
 

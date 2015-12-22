@@ -16,28 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     checkforupdate.cpp \
     loaddatabase.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/aboutdialog.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/aboutdialog.cpp \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.cpp \
     runquerydialog.cpp
 
 HEADERS  += mainwindow.h \
     checkforupdate.h \
     loaddatabase.h \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.h \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.h \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.h \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.h \
     runquerydialog.h
 
+
 FORMS    += mainwindow.ui \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.ui \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.ui \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.ui \
-    ../../Qt Projects/VisitationManagementTool-master/runquerydialog.ui \
     runquerydialog.ui
 
 VERSION += 2.0
