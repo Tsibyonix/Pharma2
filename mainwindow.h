@@ -15,6 +15,9 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QSqlError>
+#include <QPushButton>
+#include <QLayoutItem>
+#include <QSqlTableModel>
 
 //ui
 
@@ -47,11 +50,17 @@ private:
 
     QSqlQueryModel *model;
 
+    QPushButton *addButton;
+    QPushButton *deleteButton;
+
     //update
     CheckForUpdate update;
 
     //database
     LoadDatabase *database;
+
+    QTableView *tableView;
+    QSqlTableModel *tableModel;
 
     //settings
     void saveSettings();
@@ -62,6 +71,8 @@ private:
 
 
     void processQuery(QString Query, QString Title);
+    void createTab(QString selection);
+    void setupTable(QString table);
     Ui::MainWindow *ui;
 
 signals:
@@ -72,6 +83,8 @@ private slots:
     void closeTab(int index);
 
     void tableListSelectionChanged(QModelIndex index);
+    void addButtonPressed();
+    void deleteButtonPressed();
 
     //action
     void action_CheckForUpdate();
