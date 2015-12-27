@@ -1,3 +1,12 @@
+/*  Table is selected from the left panel
+ *  tabChanged slot sets up the table.
+ *  everytime the tab is changed the table is reset
+ *  add button adds the rows, submit button commits the changes
+ *  delete button deletes the one by one, multi-delete not supported yet
+ */
+
+
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -19,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     init_SignalSlots();
     init_LoadDatabase();
     //init_TableList();
+
+
 }
 
 void MainWindow::saveSettings()
@@ -52,6 +63,7 @@ void MainWindow::init_SignalSlots()
     this->connect(&update, SIGNAL(broadcastMessage(QString)), this, SLOT(showMessage(QString)));
     this->connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
     this->connect(ui->tableList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(tableListSelectionChanged(QModelIndex)));
+    this->connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
     //actions
     this->connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(aboutWindow(bool)));
@@ -149,10 +161,8 @@ void MainWindow::createTab(QString selection)
         tabWidget = new QWidget(this);
         QHBoxLayout *hBoxLayout;
         hBoxLayout = new QHBoxLayout(this);
-        QPushButton *submitButton;
         submitButton = new QPushButton("Submit");
         hBoxLayout->addWidget(submitButton);
-        QPushButton *revertButton;
         revertButton = new QPushButton("Revert");
         hBoxLayout->addWidget(revertButton);
         hBoxLayout->addSpacerItem(new QSpacerItem(200, 15, QSizePolicy::Expanding));
@@ -170,10 +180,11 @@ void MainWindow::createTab(QString selection)
         tabWidget->setLayout(vBoxLayout);
         int index = ui->tabWidget->insertTab(ui->tabWidget->currentIndex() + 1, tabWidget, selection);
         ui->tabWidget->setCurrentIndex(index);
-        setupTable(selection);
-
+        //setupTable(selection);
+        tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         this->connect(addButton, SIGNAL(clicked(bool)), this, SLOT(addButtonPressed()));
         this->connect(deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteButtonPressed()));
+        this->connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitButtonPressed()));
 //    }
 }
 
@@ -190,34 +201,57 @@ void MainWindow::tableListSelectionChanged(QModelIndex index)
 
 void MainWindow::setupTable(QString table)
 {
-    tableModel = new QSqlTableModel(this);
+
     tableModel->setTable(table);
     tableModel->setSort(1, Qt::AscendingOrder);
     tableModel->select();
+    tableModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     tableView->setModel(tableModel);
 }
 
 void MainWindow::addButtonPressed()
 {
     showMessage("AddButton pressed");
-    QString table = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-    showMessage(table);
-    tableModel->clear();
-    tableModel->setTable(table);
-    tableModel->select();
     QTableView *tempTable;
     tempTable = qobject_cast<QTableView*>(ui->tabWidget->currentWidget()->layout()->itemAt(0)->widget());
-    tempTable->setModel(tableModel);
+    //tempTable->setModel(tableModel);
     tableModel->insertRow(tableModel->rowCount());
 }
 
 void MainWindow::deleteButtonPressed()
 {
     showMessage("DelButton pressed");
-    //ui->tabWidget->currentWidget()->layout()->itemAt(0)->widget()->show();
+    tableModel->setEditStrategy(QSqlTableModel::OnRowChange);
     QTableView *tempTable;
     tempTable = qobject_cast<QTableView*>(ui->tabWidget->currentWidget()->layout()->itemAt(0)->widget());
-    tempTable->hide();
+    QModelIndex index;
+    int row = -1;
+    index = tempTable->currentIndex();
+    row = index.row();
+    tableModel->removeRow(row);
+    tableModel->submit();
+    tabChanged(-1);
+    tableModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+}
+
+void MainWindow::submitButtonPressed()
+{
+    showMessage("SubmitButton pressed");
+    QString table = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+    showMessage(table);
+    QTableView *tempTable;
+    tempTable = qobject_cast<QTableView*>(ui->tabWidget->currentWidget()->layout()->itemAt(0)->widget());
+    tempTable->setModel(tableModel);
+    tableModel->database().transaction();
+    if(tableModel->submitAll())
+    {
+        tableModel->database().commit();
+    }
+    else
+    {
+        tableModel->database().rollback();
+        showMessage("Commit failed.");
+    }
 }
 
 //actions
@@ -250,6 +284,24 @@ void MainWindow::action_Exit()
 void MainWindow::closeTab(int index)
 {
     ui->tabWidget->removeTab(index);
+}
+
+void MainWindow::tabChanged(int index)
+{
+    QString table = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+    if(!table.isNull())
+    {
+        showMessage(table);
+        tableModel = new QSqlTableModel(this);
+        tableModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+        //tableModel->clear();
+        tableModel->setTable(table);
+        tableModel->select();
+        QTableView *tempTable;
+        tempTable = qobject_cast<QTableView*>(ui->tabWidget->currentWidget()->layout()->itemAt(0)->widget());
+        tempTable->setModel(tableModel);
+        //tempTable->hide();
+    }
 }
 
 MainWindow::~MainWindow()

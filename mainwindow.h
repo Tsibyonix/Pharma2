@@ -52,6 +52,8 @@ private:
 
     QPushButton *addButton;
     QPushButton *deleteButton;
+    QPushButton *submitButton;
+    QPushButton *revertButton;
 
     //update
     CheckForUpdate update;
@@ -81,10 +83,12 @@ private slots:
     void showMessage(QString message);
     void aboutWindow(bool);
     void closeTab(int index);
+    void tabChanged(int index);
 
     void tableListSelectionChanged(QModelIndex index);
     void addButtonPressed();
     void deleteButtonPressed();
+    void submitButtonPressed();
 
     //action
     void action_CheckForUpdate();
